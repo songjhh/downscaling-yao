@@ -13,7 +13,8 @@ df["date"] = pd.to_datetime(df[["year", "month", "day"]])
 
 # 按站点代码和月份分组，计算每个组的 value 总和
 result = (
-    df.groupby(["station_code", "longitude", "latitude", df["date"].dt.month])["value"]
+    df.groupby(["station_code", df["date"].dt.month])["value"]
+    # df.groupby(["station_code", "longitude", "latitude", "elevation", df["date"].dt.month])["value"]
     .sum()
     .reset_index()
 )

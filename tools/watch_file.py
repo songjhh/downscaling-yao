@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import xarray
 
-root_dir = os.path.abspath("../data/2020-changjiang-month/")
+# root_dir = os.path.abspath("../data/2020-changjiang-month/")
+root_dir = os.path.abspath("../data/2020-changjiang-month-by-station/")
 # root_dir = os.path.abspath("../data/2020-month/")
 pic_dir = os.path.abspath("../data/temp/")
 
@@ -14,11 +15,12 @@ for root, dirs, files in os.walk(root_dir):
 
         plt.close("all")
         xds = xarray.open_dataset(os.path.join(root, file))
+        print(xds)
         target = xds["precipitation"]
         plt.figure(figsize=(32, 12))
         target.transpose("time", "lat", "lon").plot()
-        # plt.show()
-        plt.savefig(pic_dir + "/" + file[:-4] + ".png")
+        plt.show()
+        # plt.savefig(pic_dir + "/" + file[:-4] + ".png")
 
         # dst = ncdataset(os.path.join(root, file))
         # target = dst.variables["precipitation"]

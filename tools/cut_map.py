@@ -23,6 +23,6 @@ for root, dirs, files in os.walk(root_dir):
         clipped_ds.attrs = xds.attrs
         clipped_ds.close()
 
-# site = os.path.abspath("../data/shp/site/lat_lon_changjiang.shp")
-# geodf = gpd.read_file(r"%s" % site)
+# station = os.path.abspath("../data/shp/station/lat_lon_changjiang.shp")
+# geodf = gpd.read_file(r"%s" % station)
 # print(geodf)

@@ -12,11 +12,11 @@
     - station 长江站点
   - station-data 站点原始数据
 - tools 工具代码
-  - calc_month_precipitation.py 计算 IMERG 月降水量
-  - calc_month_station.py 计算 IMERG 在各个站点处的月降水量
-  - cut_map.py 裁剪长江流域
-  - del-station-data.py 删除无用的站点数据
-  - get_original_by_station.py 获取长江流域站点的月降水量
+  - calc_month_for_gpm.py 计算 IMERG 月降水量
+  - calc_month_for_station.py 获取长江流域站点的月降水量
+  - cut_map_for_gpm.py 裁剪长江流域
+  - del_station_data.py 删除无用的站点数据
+  - calc_month_for_gpm_by_station.py 计算 IMERG 在各个站点处的月降水量
   - verify_origin.py 未完成
   - watch_file.py 查看文件
-	- compare_station_for_pic.py 生成遥感和站点的对比图表图
+	- compare_gpm_station_by_pic.py 生成遥感和站点的对比图表图

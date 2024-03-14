@@ -5,7 +5,8 @@ import os
 
 observed_dir = os.path.abspath("../data/2020-station-month/")
 predicted_dir = os.path.abspath("../data/2020-changjiang-month-by-station/")
-pic_dir = os.path.abspath("../analyse/regression-pic/")
+# pic_dir = os.path.abspath("../analyse/regression-pic/")
+pic_dir = os.path.abspath("../data/temp/pic/")
 
 for root, dirs, files in os.walk(observed_dir):
     for file in files:

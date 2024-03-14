@@ -1,0 +1,19 @@
+- analyse 验证的代码
+- data 数据
+  - 2020-changjiang-month 2020 年长江流域 IMERG 的月降水量
+  - 2020-changjiang-month-by-station 2020 年长江流域 IMERG 在站点位置的月降水量
+  - 2020-month 2020 年长江流域（未裁剪）IMERG 的月降水量
+  - 2020-station-month 2020 年站点实测月降水量
+  - original-data 原始数据
+  - shp
+    - boundary 长江边界
+    - station 长江站点
+  - station-data 站点原始数据
+- tools 工具代码
+  - calc_month_precipitation.py 计算 IMERG 月降水量
+  - calc_month_station.py 计算 IMERG 在各个站点处的月降水量
+  - cut_map.py 裁剪长江流域
+  - del-station-data.py 删除无用的站点数据
+  - get_original_by_station.py 获取长江流域站点的月降水量
+  - verify_origin.py 未完成
+  - watch_file.py 查看文件

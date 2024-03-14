@@ -1,4 +1,6 @@
-- analyse 验证的代码
+- analyse
+  - analyse.ipynb 验证代码
+  - regression-pic 遥感和站点的对比图表图
 - data 数据
   - 2020-changjiang-month 2020 年长江流域 IMERG 的月降水量
   - 2020-changjiang-month-by-station 2020 年长江流域 IMERG 在站点位置的月降水量
@@ -17,3 +19,4 @@
   - get_original_by_station.py 获取长江流域站点的月降水量
   - verify_origin.py 未完成
   - watch_file.py 查看文件
+	- compare_station_for_pic.py 生成遥感和站点的对比图表图

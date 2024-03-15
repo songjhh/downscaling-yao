@@ -4,7 +4,7 @@ from scipy import stats
 import os
 
 observed_dir = os.path.abspath("../data/2020-station-month/")
-predicted_dir = os.path.abspath("../data/result/singan-0101-x100/station/")
+predicted_dir = os.path.abspath("../data/result/singan-0101-x10/station/")
 # pic_dir = os.path.abspath("../analyse/regression-pic/")
 pic_dir = os.path.abspath("../analyse/sr-pic/")
 

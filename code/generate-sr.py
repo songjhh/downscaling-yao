@@ -58,7 +58,7 @@ if __name__ == "__main__":
     parser = config.get_arguments()
     parser.add_argument("--model_dir", default="")
     parser.add_argument(
-        "--sr_factor", help="super resolution factor", type=float, default=4
+        "--sr_factor", help="super resolution factor", type=float, default=10
     )
     parser.add_argument("--mode", help="task to be done", default="SR")
     parser.set_defaults(nc_im=1)
@@ -82,8 +82,8 @@ if __name__ == "__main__":
         NoiseAmp = torch.load(opt.model_dir + "/NoiseAmp.pth")
 
     root_dir = os.path.abspath("../data/2020-month/")
-    result_save_path = os.path.abspath("../data/result/singan-0101-x100/result/")
-    original_save_path = os.path.abspath("../data/result/singan-0101-x100/original/")
+    result_save_path = os.path.abspath("../data/result/singan-0101-x10/result/")
+    original_save_path = os.path.abspath("../data/result/singan-0101-x10/original/")
     for testing_file in Path(root_dir).rglob("*.nc4"):
         save_name = str(testing_file)[-10:-4]
         parser.set_defaults(input_name="%s" % (save_name))

@@ -4,11 +4,11 @@ import numpy as np
 import os
 import pandas as pd
 
-root_dir = os.path.abspath("../data/result/singan-0101-x100/cut/")
+root_dir = os.path.abspath("../data/result/singan-0101-x10/cut/")
 station_locations = gpd.read_file(
     os.path.abspath("../data/shp/station/lat_lon_changjiang.shp")
 )
-save_dir = os.path.abspath("../data/result/singan-0101-x100/station/")
+save_dir = os.path.abspath("../data/result/singan-0101-x10/station/")
 station_data = pd.read_csv(
     os.path.abspath("../data/station-data/2020china_2400stations_precipitation.csv")
 )

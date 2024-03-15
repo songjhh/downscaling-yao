@@ -4,7 +4,7 @@ import numpy as np
 import os
 import pandas as pd
 
-root_dir = os.path.abspath("../data/result/singan-0101-x100/result/")
+root_dir = os.path.abspath("../data/result/singan-0101-x100/cut/")
 station_locations = gpd.read_file(
     os.path.abspath("../data/shp/station/lat_lon_changjiang.shp")
 )
@@ -26,9 +26,6 @@ for root, dirs, files in os.walk(root_dir):
             lon = station["LONGITUDE"]
             lat_index = np.abs(nc_data.lat - lat).argmin()
             lon_index = np.abs(nc_data.lon - lon).argmin()
-            print(lat_index)
-            print(lon_index)
-            print("--------------------------------------")
             precipitation_value = precipitation_data[lat_index, lon_index].values
             station_precipitation[station["STATION_CO"]] = precipitation_value
             sorted_items = sorted(station_precipitation.items())

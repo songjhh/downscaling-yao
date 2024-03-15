@@ -10,29 +10,49 @@ import xarray
 root_dir = os.path.abspath("../data/2020-month/")
 pic_dir = os.path.abspath("../data/temp/")
 
-for root, dirs, files in os.walk(root_dir):
-    for file in files:
+# for root, dirs, files in os.walk(root_dir):
+#     for file in files:
 
-        plt.close("all")
-        xds = xarray.open_dataset(os.path.join(root, file))
-        # print(xds)
-        target = xds["precipitation"]
-        plt.figure(figsize=(32, 12))
-        print(target)
-        target.transpose("time", "lat", "lon").plot()
-        # plt.show()
-        plt.savefig(pic_dir + "/" + file[:-4] + ".png")
-        break
+#         plt.close("all")
+#         xds = xarray.open_dataset(os.path.join(root, file))
+#         # print(xds)
+#         target = xds["precipitation"]
+#         plt.figure(figsize=(32, 12))
+#         print(target)
+#         target.transpose("time", "lat", "lon").plot()
+#         # plt.show()
+#         plt.savefig(pic_dir + "/" + file[:-4] + ".png")
+#         break
 
-        # dst = ncdataset(os.path.join(root, file))
-        # target = dst.variables["precipitation"]
-        # target = np.squeeze(target)
-        # target = np.flipud(target)
-        # sns.set()
-        # plt.close("all")
-        # plt.figure(figsize=(32, 12))
-        # ax = sns.heatmap(
-        #     target, vmin=0, yticklabels=False, xticklabels=False, vmax=np.max(target)
-        # )
-        # plt.show()
-        # plt.savefig(pic_dir + "/" + file[:-4] + ".png")
+#         # dst = ncdataset(os.path.join(root, file))
+#         # target = dst.variables["precipitation"]
+#         # target = np.squeeze(target)
+#         # target = np.flipud(target)
+#         # sns.set()
+#         # plt.close("all")
+#         # plt.figure(figsize=(32, 12))
+#         # ax = sns.heatmap(
+#         #     target, vmin=0, yticklabels=False, xticklabels=False, vmax=np.max(target)
+#         # )
+#         # plt.show()
+#         # plt.savefig(pic_dir + "/" + file[:-4] + ".png")
+
+plt.close("all")
+# xds = xarray.open_dataset("/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/result/singan-0101-x100/original-202010.nc4")
+# xds = xarray.open_dataset("/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/result/singan-0101-x100/result-202010.nc4")
+xds = xarray.open_dataset("/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/2020-month/202010.nc4")
+# print(xds)
+# print(xds["time"].shape)
+target = xds["precipitation"]
+print(target)
+# print(target.dimensions.keys())
+plt.figure(figsize=(32, 12))
+# lat_lon_data = target.sel(lat=24, lon=90)
+# print(lat_lon_data.values)
+# print(target[0][0])
+# target.transpose("lat", "lon").plot()
+target.transpose("time", "lat", "lon").plot()
+# plt.show()
+# plt.savefig(pic_dir + "/" + "a.png")
+# plt.savefig(pic_dir + "/" + "b.png")
+plt.savefig(pic_dir + "/" + "c.png")

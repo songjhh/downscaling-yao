@@ -10,6 +10,61 @@ from netCDF4 import Dataset as ncdataset
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+
+
+def create_nc4(save_path, save_name, extracted_data, time):
+    # original_lat_range = (0, 90)
+    # original_lon_range = (0, 180)
+    new_lat_range = (24, 36)
+    new_lon_range = (90, 122)
+    lon_shape = extracted_data.shape[0]
+    lat_shape = extracted_data.shape[1]
+
+    # 计算经纬度的索引范围
+    # lat_start = int((new_lat_range[0] - original_lat_range[0]) / (original_lat_range[1] - original_lat_range[0]) * target.shape[0])
+    # lat_end = int((new_lat_range[1] - original_lat_range[0]) / (original_lat_range[1] - original_lat_range[0]) * target.shape[0])
+    # lon_start = int((new_lon_range[0] - original_lon_range[0]) / (original_lon_range[1] - original_lon_range[0]) * target.shape[1])
+    # lon_end = int((new_lon_range[1] - original_lon_range[0]) / (original_lon_range[1] - original_lon_range[0]) * target.shape[1])
+    # extracted_data = extracted_data[new_lat_range[0]:new_lat_range[1], new_lon_range[0]:new_lon_range[1]]
+
+    # 创建新的NetCDF文件
+    new_dataset = ncdataset(
+        os.path.join(save_path, save_name + ".nc4"), "w", format="NETCDF4"
+    )
+
+    # 创建经纬度维度
+    # new_dataset.createDimension("time", 1)
+    new_dataset.createDimension("lat", lat_shape)
+    new_dataset.createDimension("lon", lon_shape)
+
+    # 创建经纬度变量
+    # times = new_dataset.createVariable("time", object, ("time",))
+    latitudes = new_dataset.createVariable("lat", np.float32, ("lat",))
+    longitudes = new_dataset.createVariable("lon", np.float32, ("lon",))
+
+    # 创建目标变量
+    new_variable = new_dataset.createVariable(
+        "precipitation",
+        np.float32,
+        (
+            # "time",
+            "lon",
+            "lat",
+        ),
+    )
+
+    # 写入经纬度数据
+    # times[:] = time[:]
+    latitudes[:] = np.linspace(new_lat_range[0], new_lat_range[1], lat_shape)
+    longitudes[:] = np.linspace(new_lon_range[0], new_lon_range[1], lon_shape)
+
+    # 写入目标数据
+    new_variable[:] = extracted_data
+    # new_variable[:] = np.transpose(extracted_data)
+
+    # 关闭文件
+    new_dataset.close()
 
 
 if __name__ == "__main__":
@@ -40,21 +95,9 @@ if __name__ == "__main__":
         reals = torch.load(opt.model_dir + "/reals.pth")
         NoiseAmp = torch.load(opt.model_dir + "/NoiseAmp.pth")
 
-    # path = Path("/content/testing-set")
-    path = Path(
-        "/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/2020-month"
-    )
-    # saveData = "/content/drive/MyDrive/code/SinGAN-songjhh"
-    saveData = (
-        "/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/result/singan-0101-x100"
-    )
-    # savePic = "/content"
-    savePic = (
-        "/Users/jianghouhong/code/songjhh/depth-learning/downscaling-yao/data/result/singan-0101-x100"
-    )
-    # compareSet = "/Users/jianghouhong/code/songjhh/depth-learning/SinGAN-songjhh/data/compare-set"
-    for testing_file in path.rglob("*.nc4"):
-        # save_name = str(testing_file)[-12:-4]
+    root_dir = os.path.abspath("../data/2020-month/")
+    save_path = os.path.abspath("../data/result/singan-0101-x100/")
+    for testing_file in Path(root_dir).rglob("*.nc4"):
         save_name = str(testing_file)[-10:-4]
         parser.set_defaults(input_name="%s" % (save_name))
         opt = parser.parse_args()
@@ -70,9 +113,6 @@ if __name__ == "__main__":
         target = np.squeeze(target)
         maxsd = [np.max(target)]
 
-        # compare = ncdataset(compareSet + "/%s.nc4" % (save_name)).variables["precipitation"]
-        # compare = np.squeeze(compare)
-
         target_torch = torch.from_numpy(target)
         target_torch = target_torch / np.max(target)
         target_torch = functions.norm(target_torch)
@@ -80,30 +120,10 @@ if __name__ == "__main__":
 
         ud = size.mimresize(target_torch, 1, maxsd, opt)
 
-        # resampled = size.mimresize_in(target, scale_factor=1 / 4)
-        # sns.set()
-        # plt.figure(figsize=(32, 12))
-        # ax = sns.heatmap(
-        #     resampled,
-        #     vmin=0,
-        #     yticklabels=False,
-        #     xticklabels=False,
-        #     vmax=np.max(resampled),
-        # )
-        # plt.title("resampled data")
-        # plt.savefig(savePic + "/pic/resampled-" + save_name + ".png")
-        # # print(len(resampled))
-        # # print(len(resampled[0]))
-        # np.savetxt(
-        #     saveData + "/Resampled/%s.txt" % save_name,
-        #     resampled,
-        # )
-
-        # reals = []
         real = size.adjust_scales2image_SR(ud, maxsd, opt)
         real_ = real
         reals = size.creat_reals_pyramid(real_, reals, maxsd, opt)
-        real = reals[-1]  # read_image(opt)
+        real = reals[-1]
         real_ = real
 
         in_scale, iter_num = functions.calc_init_scale(opt)
@@ -131,64 +151,10 @@ if __name__ == "__main__":
             0 : int(opt.sr_factor * reals[-1].shape[3]),
         ]
 
-        dir2save = functions.generate_dir2save(opt)
-        # plt.imsave(
-        #     "%s/%s_HR.png" % (dir2save, opt.input_name),
-        #     functions.convert_image_np(out.detach()),
-        #     vmin=0,
-        #     vmax=1,
-        # )
-
         outt = size.denorm(out)
         inp = outt[-1, -1, :, :].to(torch.device("cpu"))
         inp = inp.numpy()
         inpp = inp * maxsd
 
-        # np.savetxt(
-        #     "/content/drive/MyDrive/code/SinGAN-songjhh/Results/%s.txt" % save_name,
-        #     inpp,
-        # )
-        np.savetxt(
-            saveData + "/Results/%s.txt" % save_name,
-            inpp,
-        )
-        np.savetxt(
-            saveData + "/Original/%s.txt" % save_name,
-            target,
-        )
-        # np.savetxt(
-        #     saveData + "/Compare/%s.txt" % save_name,
-        #     compare,
-        # )
-
-        sns.set()
-        plt.close("all")
-        plt.figure(figsize=(32, 12))
-        ax = sns.heatmap(
-            inpp[::-1], vmin=0, yticklabels=False, xticklabels=False, vmax=np.max(inpp)
-        )
-        inpp.transpose("time", "lat", "lon").plot()
-        print(len(inpp))
-        print(len(inpp[0]))
-        plt.title("Result from model")
-        plt.savefig(savePic + "/pic/result-" + save_name + ".png")
-
-        sns.set()
-        plt.figure(figsize=(32, 12))
-        ax = sns.heatmap(
-            target[::-1], vmin=0, yticklabels=False, xticklabels=False, vmax=np.max(target)
-        )
-        # print(len(target))
-        # print(len(target[0]))
-        plt.title("Original data")
-        plt.savefig(savePic + "/pic/original-" + save_name + ".png")
-        break
-        # sns.set()
-        # plt.figure(figsize=(14, 12))
-        # ax = sns.heatmap(
-        #     compare, vmin=0, yticklabels=False, xticklabels=False, vmax=np.max(compare)
-        # )
-        # print(len(compare))
-        # print(len(compare[0]))
-        # plt.title("Compare data")
-        # plt.savefig(savePic + "/pic/compare-" + save_name + ".png")
+        create_nc4(save_path, "original-" + save_name, target, dst.variables["time"])
+        create_nc4(save_path, "result-" + save_name, inpp, dst.variables["time"])

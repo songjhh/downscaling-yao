@@ -14,19 +14,10 @@ import os
 
 
 def create_nc4(save_path, save_name, extracted_data, time):
-    # original_lat_range = (0, 90)
-    # original_lon_range = (0, 180)
     new_lat_range = (24, 36)
     new_lon_range = (90, 122)
     lon_shape = extracted_data.shape[0]
     lat_shape = extracted_data.shape[1]
-
-    # 计算经纬度的索引范围
-    # lat_start = int((new_lat_range[0] - original_lat_range[0]) / (original_lat_range[1] - original_lat_range[0]) * target.shape[0])
-    # lat_end = int((new_lat_range[1] - original_lat_range[0]) / (original_lat_range[1] - original_lat_range[0]) * target.shape[0])
-    # lon_start = int((new_lon_range[0] - original_lon_range[0]) / (original_lon_range[1] - original_lon_range[0]) * target.shape[1])
-    # lon_end = int((new_lon_range[1] - original_lon_range[0]) / (original_lon_range[1] - original_lon_range[0]) * target.shape[1])
-    # extracted_data = extracted_data[new_lat_range[0]:new_lat_range[1], new_lon_range[0]:new_lon_range[1]]
 
     # 创建新的NetCDF文件
     new_dataset = ncdataset(
@@ -34,12 +25,10 @@ def create_nc4(save_path, save_name, extracted_data, time):
     )
 
     # 创建经纬度维度
-    # new_dataset.createDimension("time", 1)
     new_dataset.createDimension("lat", lat_shape)
     new_dataset.createDimension("lon", lon_shape)
 
     # 创建经纬度变量
-    # times = new_dataset.createVariable("time", object, ("time",))
     latitudes = new_dataset.createVariable("lat", np.float32, ("lat",))
     longitudes = new_dataset.createVariable("lon", np.float32, ("lon",))
 
@@ -48,20 +37,17 @@ def create_nc4(save_path, save_name, extracted_data, time):
         "precipitation",
         np.float32,
         (
-            # "time",
             "lon",
             "lat",
         ),
     )
 
     # 写入经纬度数据
-    # times[:] = time[:]
     latitudes[:] = np.linspace(new_lat_range[0], new_lat_range[1], lat_shape)
     longitudes[:] = np.linspace(new_lon_range[0], new_lon_range[1], lon_shape)
 
     # 写入目标数据
     new_variable[:] = extracted_data
-    # new_variable[:] = np.transpose(extracted_data)
 
     # 关闭文件
     new_dataset.close()
@@ -96,7 +82,8 @@ if __name__ == "__main__":
         NoiseAmp = torch.load(opt.model_dir + "/NoiseAmp.pth")
 
     root_dir = os.path.abspath("../data/2020-month/")
-    save_path = os.path.abspath("../data/result/singan-0101-x100/")
+    result_save_path = os.path.abspath("../data/result/singan-0101-x100/result/")
+    original_save_path = os.path.abspath("../data/result/singan-0101-x100/original/")
     for testing_file in Path(root_dir).rglob("*.nc4"):
         save_name = str(testing_file)[-10:-4]
         parser.set_defaults(input_name="%s" % (save_name))
@@ -156,5 +143,10 @@ if __name__ == "__main__":
         inp = inp.numpy()
         inpp = inp * maxsd
 
-        create_nc4(save_path, "original-" + save_name, target, dst.variables["time"])
-        create_nc4(save_path, "result-" + save_name, inpp, dst.variables["time"])
+        create_nc4(
+            original_save_path,
+            save_name,
+            target,
+            dst.variables["time"],
+        )
+        create_nc4(result_save_path, save_name, inpp, dst.variables["time"])

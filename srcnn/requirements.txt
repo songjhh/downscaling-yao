@@ -1,0 +1,10 @@
+numpy
+matplotlib
+xarray
+tensorflow
+seaborn
+opencv-python
+scikit-image
+netcdf4
+h5netcdf
+dask

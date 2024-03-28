@@ -11,8 +11,11 @@ result_dir = os.path.abspath("../data/2020-changjiang-month/")
 
 for root, dirs, files in os.walk(root_dir):
     for file in files:
+        # if (file != "2020.nc4"):
+        #     continue
         xds = xarray.open_dataset(os.path.join(root, file))
         xds = xds[["precipitation"]].transpose("time", "lat", "lon")
+        # xds = xds[["precipitation"]].transpose("lat", "lon")
         xds.rio.set_spatial_dims(x_dim="lon", y_dim="lat", inplace=True)
         xds.rio.write_crs("EPSG:4326", inplace=True)
 

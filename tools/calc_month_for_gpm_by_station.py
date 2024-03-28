@@ -17,8 +17,11 @@ station_data = pd.read_csv(
 
 for root, dirs, files in os.walk(root_dir):
     for file in files:
+        # if (file != "2020.nc4"):
+        #     continue
         nc_data = xr.open_dataset(os.path.join(root, file))
         precipitation_data = nc_data["precipitation"]
+        print(precipitation_data)
 
         station_precipitation = {}
         for index, station in station_locations.iterrows():
@@ -30,6 +33,8 @@ for root, dirs, files in os.walk(root_dir):
             lon_index = np.abs(nc_data.lon - lon).argmin()
             precipitation_value = precipitation_data[:, lat_index, lon_index].values
             station_precipitation[station["STATION_CO"]] = precipitation_value[0]
+            # precipitati_value = precipitation_data[lat_index, lon_index].values
+            # station_precipitation[station["STATION_CO"]] = precipitation_value
             sorted_items = sorted(station_precipitation.items())
             sorted_dict = {k: v for k, v in sorted_items}
 

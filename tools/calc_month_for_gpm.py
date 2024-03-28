@@ -8,6 +8,8 @@ monthday = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 root_dir = os.path.abspath("../data/original-data/")
 result_dir = os.path.abspath("../data/2020-month/")
 
+ds_resampled_month_x1 = []
+
 for root, dirs, files in os.walk(root_dir):
     for file in files:
         ds = xr.open_dataset(os.path.join(root, file), group="Grid")
@@ -28,3 +30,14 @@ for root, dirs, files in os.walk(root_dir):
         ds_resampled_x1.attrs["Units"] = "mm/month"
 
         ds_resampled_x1.to_netcdf(result_dir + new_file_name)
+
+#         ds_resampled_month_x1.append(ds_resampled_x1)
+
+# # 连接每个月的数据
+# ds_resampled_year_x1 = xr.concat(ds_resampled_month_x1, dim="time")
+
+# # 计算年降水总量
+# ds_resampled_year_x1_sum = ds_resampled_year_x1.sum(dim="time")
+
+# ds_resampled_year_x1_sum.attrs["units"] = "mm/year"
+# ds_resampled_year_x1_sum.to_netcdf(result_dir + "/2020.nc4")

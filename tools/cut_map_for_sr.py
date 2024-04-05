@@ -5,9 +5,9 @@ import os
 import matplotlib.pyplot as plt
 import rioxarray
 
-root_dir = os.path.abspath("../data/result/singan-0101-x10/result/")
+root_dir = os.path.abspath("../data/result/singan-202001-x10/result/")
 changjiang_shp_path = os.path.abspath("../data/shp/boundary/changjiang.shp")
-result_dir = os.path.abspath("../data/result/singan-0101-x10/cut/")
+result_dir = os.path.abspath("../data/result/singan-202001-x10/cut/")
 
 for root, dirs, files in os.walk(root_dir):
     for file in files:

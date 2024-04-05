@@ -83,8 +83,8 @@ if __name__ == "__main__":
         NoiseAmp = torch.load(opt.model_dir + "/NoiseAmp.pth")
 
     root_dir = os.path.abspath("../data/2020-month/")
-    result_save_path = os.path.abspath("../data/result/singan-202001-x10/result/")
-    original_save_path = os.path.abspath("../data/result/singan-202001-x10/original/")
+    result_save_path = os.path.abspath("../data/result/singan-0101-x10/result/")
+    original_save_path = os.path.abspath("../data/result/singan-0101-x10/original/")
     for testing_file in Path(root_dir).rglob("*.nc4"):
         save_name = str(testing_file)[-10:-4]
         parser.set_defaults(input_name="%s" % (save_name))

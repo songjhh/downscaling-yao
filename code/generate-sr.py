@@ -13,7 +13,7 @@ import seaborn as sns
 import os
 
 
-def create_nc4(save_path, save_name, extracted_data, time):
+def create_nc4(save_path, save_name, extracted_data):
     new_lat_range = (24, 36)
     new_lon_range = (90, 122)
     lon_shape = extracted_data.shape[0]
@@ -144,10 +144,16 @@ if __name__ == "__main__":
         inp = inp.numpy()
         inpp = inp * maxsd
 
+        # create_nc4(
+        #     original_save_path,
+        #     save_name,
+        #     target,
+        #     dst.variables["time"],
+        # )
+        # create_nc4(result_save_path, save_name, inpp, dst.variables["time"])
         create_nc4(
             original_save_path,
             save_name,
-            target,
-            dst.variables["time"],
+            target
         )
-        create_nc4(result_save_path, save_name, inpp, dst.variables["time"])
+        create_nc4(result_save_path, save_name, inpp)

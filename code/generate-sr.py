@@ -54,6 +54,7 @@ def create_nc4(save_path, save_name, extracted_data, time):
 
 
 if __name__ == "__main__":
+    # torch.nn.Module.dump_patches = True
     # 处理配置
     parser = config.get_arguments()
     parser.add_argument("--model_dir", default="")
@@ -82,8 +83,8 @@ if __name__ == "__main__":
         NoiseAmp = torch.load(opt.model_dir + "/NoiseAmp.pth")
 
     root_dir = os.path.abspath("../data/2020-month/")
-    result_save_path = os.path.abspath("../data/result/singan-0101-x10/result/")
-    original_save_path = os.path.abspath("../data/result/singan-0101-x10/original/")
+    result_save_path = os.path.abspath("../data/result/singan-202001-x10/result/")
+    original_save_path = os.path.abspath("../data/result/singan-202001-x10/original/")
     for testing_file in Path(root_dir).rglob("*.nc4"):
         save_name = str(testing_file)[-10:-4]
         parser.set_defaults(input_name="%s" % (save_name))
